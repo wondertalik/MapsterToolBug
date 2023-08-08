@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Mapster" Version="7.4.0-pre06" />
+      <PackageReference Include="Mapster.Core" Version="1.2.1-pre04" />
+      <PackageReference Include="Mapster.DependencyInjection" Version="1.0.1-pre02" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    </ItemGroup>
+
+    <Target Name="Mapster" AfterTargets="AfterBuild">
+        <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet tool restore"/>
+        <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet mapster model -a &quot;$(TargetDir)$(ProjectName).dll&quot;"/>
+        <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet mapster extension -a &quot;$(TargetDir)$(ProjectName).dll&quot;"/>
+        <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet mapster mapper -a &quot;$(TargetDir)$(ProjectName).dll&quot;"/>
+    </Target>
+
+    <ItemGroup>
+        <Generated Include="**\*.g.cs"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\MapsterToolBug.Domain.Core\MapsterToolBug.Domain.Core.csproj" />
+      <ProjectReference Include="..\MapsterToolBug.Services.Contracts\MapsterToolBug.Services.Contracts.csproj" />
+    </ItemGroup>
+
+</Project>
